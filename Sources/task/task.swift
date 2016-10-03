@@ -46,12 +46,7 @@ public class TaskSource {
     source.resume()
   }
   
-  @discardableResult
-  public func launch() -> TaskSource {
-    if process.isRunning {
-      terminate()
-    }
-    
+  public func launch() {
     process.terminationHandler = { [weak self] process in
       guard let `self` = self else { return }
       
@@ -66,9 +61,6 @@ public class TaskSource {
     }
 
     process.launch()
-    process.waitUntilExit()
-    
-    return self
   }
 
   public func terminate() {
