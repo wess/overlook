@@ -7,7 +7,7 @@
 //
 
 import Foundation 
-import JSON 
+import json 
 
 public struct Settings {
   public var directories:[String] = []

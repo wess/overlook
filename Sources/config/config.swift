@@ -8,7 +8,7 @@
 
 import Foundation 
 import PathKit 
-import JSON 
+import json 
 
 public func Config() -> Settings? {
     let current = Path.current + Path(".overlook")

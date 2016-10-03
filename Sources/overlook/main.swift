@@ -10,14 +10,21 @@ import Foundation
 import PathKit
 import watch
 import config
+import cli
+import task
 
 let config      = Config()!
 let directories = config.directories.map { "\(Path($0).absolute())" }
+let output      = "Directories: \(directories)".paint(.green)
 
-print("Directories: ", directories)
+let running = task(["\(Path.current.absolute())/while.sh"]) { data in
+  let str = String(data: data, encoding: .utf8)
+  
+  print("STR: \(str)")
+}
 
-Watch(directories) { 
-    print(exec(["ls", "-la"]) ?? "nope")
+Watch(directories) {
+  running.launch()
 }
 
 dispatchMain()

@@ -3,10 +3,12 @@ import PackageDescription
 let package = Package(
     name: "overlook",
     targets: [
-      Target(name: "overlook", dependencies: ["watch", "config", "JSON"]),
+      Target(name: "overlook", dependencies: ["watch", "config", "cli", "task"]),
       Target(name: "watch"),
-      Target(name: "config", dependencies: ["JSON"]),
-      Target(name: "JSON"),
+      Target(name: "config", dependencies: ["json"]),
+      Target(name: "json"),
+      Target(name: "cli"),
+      Target(name: "task"),
     ],
 
     dependencies: [
