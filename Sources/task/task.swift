@@ -18,14 +18,7 @@ public class TaskSource {
   private var output:Pipe         = Pipe()
   private let MaxBuffer           = 4096
   
-  private lazy var process:Process = {
-    $0.launchPath      = self.path
-    $0.arguments       = self.arguments
-    $0.standardOutput  = self.output
-
-    return $0
-  }(Process())
-
+  private var process:Process?
   private let path:String           = "/usr/bin/env"
   private var arguments:[String]    = []
 
@@ -45,8 +38,21 @@ public class TaskSource {
     
     source.resume()
   }
+
+  private func createProcess() -> Process {
+    let process            = Process()
+    process.launchPath     = self.path
+    process.arguments      = self.arguments
+    process.standardOutput = self.output
+
+    return process
+  }
   
   public func launch() {
+    self.process = self.process ?? createProcess()
+
+    guard let process = self.process else { return }
+
     process.terminationHandler = { [weak self] process in
       guard let `self` = self else { return }
       
@@ -66,16 +72,19 @@ public class TaskSource {
   public func terminate() {
     source.suspend()
     source.cancel()
+
+    guard let process = process else { return }
+
     process.interrupt()
     process.suspend()
     process.terminate()
+
+    self.process = nil 
   }
 }
 
 public func task(_ arguments:[String], callback: @escaping TaskHandler) -> TaskSource {
-  let source = TaskSource(arguments, callback: callback)
-  
-  return source
+  return TaskSource(arguments, callback: callback)
 }
 
 
