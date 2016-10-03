@@ -15,7 +15,8 @@ internal let MAX_BUFFER = 4096
 
 fileprivate let DefaultTaskQueue = DispatchQueue(label: "com.overlook.tasks.queue")
 
-public class Task : Equatable {
+public class Task : Equatable, NSCopying {
+
   public var identifier:Int32 {
     guard let process = process else { return -1 }
     
@@ -69,6 +70,14 @@ public class Task : Equatable {
     self.process?.terminationHandler                    = terminationHandler
   }
   
+  deinit {
+    stop()
+  }
+  
+  public func copy(with zone: NSZone? = nil) -> Any {
+    return Task(arguments: self.arguments, queue: self.queue, path: self.path, callback: self.callback)
+  }
+
   public func start() {
     source?.resume()
     process?.launch()
@@ -86,10 +95,6 @@ public class Task : Equatable {
     
     source = nil
   }
-  
-  deinit {
-    stop()
-  }
 }
 
 public func ==(lhs:Task, rhs:Task) -> Bool {
@@ -99,13 +104,17 @@ public func ==(lhs:Task, rhs:Task) -> Bool {
 public class TaskManager {
   private var tasks:[Task] = []
 
-  func create(_ arguments:[String], callback: @escaping TaskHandler) -> Task {
-    let task = Task(arguments: arguments, callback: callback)
-    
+  func add(_ task:Task) {
     var current = tasks.filter { $0 != task }
     current.append(task)
-
+    
     tasks = current
+  }
+  
+  func create(_ arguments:[String], callback: @escaping TaskHandler) -> Task {
+    let task = Task(arguments: arguments, callback: callback)
+  
+    add(task)
     
     return task
   }
@@ -117,6 +126,28 @@ public class TaskManager {
       task.start()
     }
   }
+  
+  func start() {
+    for task in tasks {
+      task.start()
+    }
+  }
+
+  func restart() {
+    var current = tasks
+    
+    for (index, task) in tasks.enumerated() {
+      task.stop()
+      
+      let copy = task.copy() as! Task
+      
+      current.remove(at: index)
+      current.append(copy)
+      
+      copy.start()
+    }
+  }
+
   
   func stop(task:Task) {
     let filtered = tasks.filter { $0 == task }
