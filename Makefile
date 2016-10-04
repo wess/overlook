@@ -9,7 +9,7 @@ clean:
 	@rm -rf overlook.xcodeproject
 
 xcode:
-		@swift package generate-xcodeproj
+	@swift package generate-xcodeproj
 
 run:
 	@.build/debug/overlook
