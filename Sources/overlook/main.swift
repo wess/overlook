@@ -12,21 +12,33 @@ import watch
 import config
 import cli
 import task
+import env 
 
+let _           = Env(Path.current)
 let taskManager = TaskManager()
 let config      = Config()!
+let envVars     = config.envVars
 let directories = config.directories.map { "\(Path($0).absolute())" }
+let execute     = config.execute
 
-let task = taskManager.create(["\(Path.current.absolute())/while.sh"]) { (data) in
-  let str = String(data: data, encoding: .utf8)!
+print("Env: ", envVars)
+print("Dirs: ", directories)
+print("Execute: ", execute)
+
+
+
+
+
+// let task = taskManager.create(execute) { (data) in
+//   let str = String(data: data, encoding: .utf8)!
   
-  print("TASK: ", str)
-}
+//   print("TASK: ", str)
+// }
 
-taskManager.start()
+// taskManager.start()
 
-Watch(directories) {
-  taskManager.restart()
-}
+// Watch(directories) {
+//   taskManager.restart()
+// }
 
-dispatchMain()
+// dispatchMain()

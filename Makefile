@@ -6,10 +6,16 @@ build: xcode
 
 clean:
 	@swift build --clean=dist
-	@rm -rf overlook.xcodeproject
 
 xcode:
+	@rm -rf overlook.xcodeproject
 	@swift package generate-xcodeproj
 
 run:
 	@.build/debug/overlook
+
+
+release: clean
+	@swift build --configuration release
+	
+

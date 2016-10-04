@@ -8,28 +8,6 @@
 
 import Foundation 
 
-// fileprivate let ColorsEndabled:Bool = {
-//   let arguments = CommandLine.arguments 
-
-//   if arguments.contains("--no-color") || arguments.contains("--color=false") {
-//     return false
-//   }
-    
-//   if Process.arguments.contains("--color") || Process.arguments.contains("--color=true") || Process.arguments.contains("--color=always") {
-//     return true
-//   }
-    
-//     guard let terminal = String.fromCString(getenv("TERM")) else { return false }
-    
-//     return terminal.hasPrefix("screen")
-//         || terminal.hasPrefix("xterm")
-//         || terminal.hasPrefix("vt100")
-//         || terminal.containsString("color")
-//         || terminal.containsString("ansi")
-//         || terminal.containsString("cygwin")
-//         || terminal.containsString("linux")
-// }()
-
 public enum ColorCode {
   case black
   case red  

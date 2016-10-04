@@ -1,5 +1,31 @@
 {
+  "env": {
+    "Foo" : "bar"
+  },
+
+  "verbose" : true,
+
+  "ignore" : [
+    ".git",
+    ".gitignore",
+    ".overlook",
+    ".build",
+    "*.xcodeproj",
+    "Packages"
+  ],
+
   "directories": [
     "Tests"
-  ]
+  ],
+
+  "execute" : [
+    "while.sh",
+  ],
+
+  "triggers" : {
+    "while" : {
+      "directories" : ["Tests"],
+      "execute"     : ["while.sh"]
+    }
+  }
 }
