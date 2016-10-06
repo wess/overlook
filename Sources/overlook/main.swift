@@ -10,7 +10,7 @@ import Foundation
 import PathKit
 import watch
 import config
-import cli
+import terminal
 import task
 import env 
 

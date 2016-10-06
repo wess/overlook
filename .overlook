@@ -22,7 +22,7 @@
     "while.sh",
   ],
 
-  "triggers" : {
+  "tasks" : {
     "while" : {
       "directories" : ["Tests"],
       "execute"     : ["while.sh"]
