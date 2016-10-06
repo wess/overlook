@@ -23,7 +23,6 @@ public class Task : Equatable, NSCopying {
     return process.isRunning
   }
   
-  public let queue:DispatchQueue
   public let callback:TaskHandler
   public let path:String
   public let arguments:[String]
@@ -64,7 +63,6 @@ public class Task : Equatable, NSCopying {
   
   public init(arguments:[String], path:String, callback: @escaping TaskHandler) {
     self.arguments  = arguments
-    self.queue      = DispatchQueue.global(qos:DispatchQoS.QoSClass.background)
     self.path       = path
     self.callback   = callback
 
@@ -76,12 +74,7 @@ public class Task : Equatable, NSCopying {
   }
   
   public func start() {
-    queue.async { [weak self] in
-      guard let `self` = self else { fatalError("\(#function) - Self gone away") }
-      
-      self.process.launch()      
-      self.process.waitUntilExit()
-    }
+    self.process.launch()      
   }
   
   public func stop() {

@@ -13,15 +13,19 @@ public class TaskManager {
   private let defaultPath   = "/usr/bin/env"
   private var tasks:[Task]  = []
 
-  private let lock = DispatchSemaphore(value: 1)
-
+  private let lock        = DispatchSemaphore(value: 1)
+  private let taskQueue   = DispatchQueue(label: "com.overlook.task.queue")
+  private let group       = DispatchGroup()
+  
   public init() {}
   
   public func add(_ task:Task) {
-    var current = tasks.filter { $0 != task }
-    current.append(task)
+    sync {
+      var current = tasks.filter { $0 != task }
+      current.append(task)
     
-    tasks = current
+      tasks = current
+    }
   }
   
   public func create(_ arguments:[String], callback: @escaping TaskHandler) -> Task {
@@ -41,14 +45,23 @@ public class TaskManager {
   }
   
   public func start() {
-    for task in tasks {
-      task.start()
+    sync {
+      group.enter()
+      
+      taskQueue.async(group: group, execute: DispatchWorkItem(block: { [weak self] in
+        guard let `self` = self else { fatalError("\(#function) - No self") }
+        
+        for task in self.tasks {
+          task.start()
+        }
+      }))
+      
+      group.leave()
     }
   }
 
   public func restart() {
-    lock.wait()
-
+    
     let current = tasks
     
     for task in current {
@@ -60,29 +73,37 @@ public class TaskManager {
     tasks = current.map { $0.copy() as! Task }
     
     start()
-    
-    lock.signal()
   }
 
   
   public func stop(task:Task) {
-    let filtered = tasks.filter { $0 == task }
-    
-    for task in filtered {
-      task.stop()
+    sync {
+      let filtered = tasks.filter { $0 == task }
+      
+      for task in filtered {
+        task.stop()
+      }
     }
   }
   
   public func remove(task:Task) {
-    var current       = tasks
-    let filtered      = current.filter { $0 == task }
-    
-    for (index, task) in filtered.enumerated() {
-      task.stop()
+    sync {
+      var current       = tasks
+      let filtered      = current.filter { $0 == task }
       
-      current.remove(at: index)
+      for (index, task) in filtered.enumerated() {
+        task.stop()
+        
+        current.remove(at: index)
+      }
+      
+      tasks = current
     }
-    
-    tasks = current
+  }
+  
+  private func sync(block:((Void) -> Void)) {
+    lock.wait()
+    block()
+    lock.signal()
   }
 }
