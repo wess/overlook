@@ -13,6 +13,8 @@ public class TaskManager {
   private let defaultPath   = "/usr/bin/env"
   private var tasks:[Task]  = []
 
+  private let lock = DispatchSemaphore(value: 1)
+
   public init() {}
   
   public func add(_ task:Task) {
@@ -23,8 +25,7 @@ public class TaskManager {
   }
   
   public func create(_ arguments:[String], callback: @escaping TaskHandler) -> Task {
-    let queue = DispatchQueue(label: "com.overlook.queue." + arguments.joined(separator: "_"))
-    let task  = Task(arguments: arguments, queue: queue, path: defaultPath, callback: callback)
+    let task  = Task(arguments: arguments, path: defaultPath, callback: callback)
   
     add(task)
     
@@ -46,6 +47,8 @@ public class TaskManager {
   }
 
   public func restart() {
+    lock.wait()
+
     let current = tasks
     
     for task in current {
@@ -57,6 +60,8 @@ public class TaskManager {
     tasks = current.map { $0.copy() as! Task }
     
     start()
+    
+    lock.signal()
   }
 
   

@@ -1,4 +1,4 @@
-echo "While START"
+echo "WHILE STARTING..."
 
 while true
 do

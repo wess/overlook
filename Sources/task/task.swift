@@ -18,10 +18,13 @@ public class Task : Equatable, NSCopying {
   public var identifier:Int32 {
     return process.processIdentifier
   }
+
+  public var isRunning:Bool {
+    return process.isRunning
+  }
   
   public let queue:DispatchQueue
   public let callback:TaskHandler
-  public let source:DispatchSourceRead
   public let path:String
   public let arguments:[String]
   public lazy var process:Process = {
@@ -33,8 +36,8 @@ public class Task : Equatable, NSCopying {
     return $0
   }(Process())
   
-  public let output:Pipe      = Pipe()
-  private let maxBuffer       = MAX_BUFFER
+  public let output:Pipe  = Pipe()
+  private let maxBuffer   = MAX_BUFFER
   
   private var handleBlock:((FileHandle) -> Void) {
     return { [weak self] handle in
@@ -56,42 +59,33 @@ public class Task : Equatable, NSCopying {
       DispatchQueue.main.async {
         self.callback(data)
       }
-      
-      self.source.cancel()
     }
   }
   
-  public init(arguments:[String], queue:DispatchQueue = DefaultTaskQueue, path:String, callback: @escaping TaskHandler) {
+  public init(arguments:[String], path:String, callback: @escaping TaskHandler) {
     self.arguments  = arguments
-    self.queue      = queue
+    self.queue      = DispatchQueue.global(qos:DispatchQoS.QoSClass.background)
     self.path       = path
     self.callback   = callback
-    self.source     = DispatchSource.makeReadSource(fileDescriptor: output.fileHandleForReading.fileDescriptor, queue: queue)
 
     self.output.fileHandleForReading.readabilityHandler = handleBlock
   }
   
-  deinit {
-    stop()
-  }
-  
   public func copy(with zone: NSZone? = nil) -> Any {
-    return Task(arguments: self.arguments, queue: self.queue, path: self.path, callback: self.callback)
+    return Task(arguments: self.arguments, path: self.path, callback: self.callback)
   }
   
   public func start() {
-    source.resume()
-    process.launch()
+    queue.async { [weak self] in
+      guard let `self` = self else { fatalError("\(#function) - Self gone away") }
+      
+      self.process.launch()      
+      self.process.waitUntilExit()
+    }
   }
   
   public func stop() {
-    process.interrupt()
-    process.suspend()
     process.terminate()
-    
-    source.suspend()
-    source.cancel()
-    
   }
 }
 

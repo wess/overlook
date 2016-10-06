@@ -25,20 +25,16 @@ print("Env: ", envVars)
 print("Dirs: ", directories)
 print("Execute: ", execute)
 
-
-
-
-
-// let task = taskManager.create(execute) { (data) in
-//   let str = String(data: data, encoding: .utf8)!
+let task = taskManager.create(execute) { (data) in
+  let str = String(data: data, encoding: .utf8)!
   
-//   print("TASK: ", str)
-// }
+  print("TASK: ", str)
+}
 
-// taskManager.start()
+taskManager.start()
 
-// Watch(directories) {
-//   taskManager.restart()
-// }
+Watch(directories) {
+  taskManager.restart()
+}
 
-// dispatchMain()
+dispatchMain()
