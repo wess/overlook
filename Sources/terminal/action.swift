@@ -8,7 +8,7 @@
 
 import Foundation 
 
-public typealias ActionHandler = (flags:[String:String]) -> Void
+public typealias ActionHandler = (_:[String:String]) -> Void
 
 public struct Action {
   public let name:String 
@@ -16,7 +16,7 @@ public struct Action {
   public let description:String?
   public let handler:ActionHandler
 
-  public init(name:String, flags:[String], description:String? = nil, handler:ActionHandler) {
+  public init(name:String, flags:[String], description:String? = nil, handler: @escaping ActionHandler) {
     self.name         = name
     self.flags        = flags
     self.description  = description
