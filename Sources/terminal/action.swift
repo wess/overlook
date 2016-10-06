@@ -8,7 +8,7 @@
 
 import Foundation 
 
-public typealias ActionHandler = (_:[String:String]) -> Void
+public typealias ActionHandler = ([String:String]) -> Void
 
 public struct Action {
   public let name:String 
