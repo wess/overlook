@@ -96,10 +96,8 @@ public class TaskManager {
   }
   
   private func sync(block:((Void) -> Void)) {
-    DispatchQueue.main.sync {
-      lock.wait()
-      block
-      lock.signal()
-    }
+    lock.wait()
+    block()
+    lock.signal()
   }
 }
