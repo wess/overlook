@@ -27,6 +27,7 @@ public class TaskManager {
     }
   }
   
+  @discardableResult
   public func create(_ arguments:[String], callback: @escaping TaskHandler) -> Task {
     let task  = Task(arguments: arguments, path: defaultPath, callback: callback)
   
@@ -54,8 +55,10 @@ public class TaskManager {
       let current = tasks
       
       for task in current {
-        task.workItem.cancel()
-        task.stop()
+        while(task.isRunning) {
+          task.workItem.cancel()
+          task.stop()
+        }
       }
       
       tasks.removeAll()

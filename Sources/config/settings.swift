@@ -14,7 +14,7 @@ public struct Settings {
   public var verbose:Bool             = true
   public var ignore:[String]          = []
   public var directories:[String]     = []
-  public var execute:[String]         = []
+  public var execute:String           = ""
 }
 
 extension Settings {

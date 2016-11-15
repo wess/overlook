@@ -18,14 +18,5 @@
     "Tests"
   ],
 
-  "execute" : [
-    "while.sh",
-  ],
-
-  "tasks" : {
-    "while" : {
-      "directories" : ["Tests"],
-      "execute"     : ["while.sh"]
-    }
-  }
+  "execute" : "while.sh"
 }

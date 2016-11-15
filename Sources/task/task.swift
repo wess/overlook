@@ -12,8 +12,9 @@ import PathKit
 public typealias TaskHandler      = ((Data) -> Void)
 internal let MAX_BUFFER           = 4096
 
+
 public class Task : Equatable, NSCopying {
-  
+
   public var identifier:Int32 {
     return process.processIdentifier
   }
@@ -42,8 +43,8 @@ public class Task : Equatable, NSCopying {
     return $0
   }(Process())
   
-  public let output:Pipe  = Pipe()
-  private let maxBuffer   = MAX_BUFFER
+  private(set) var output:Pipe? = Pipe()
+  private let maxBuffer         = MAX_BUFFER
   
   private var handleBlock:((FileHandle) -> Void) {
     return { [weak self] handle in
@@ -57,13 +58,13 @@ public class Task : Equatable, NSCopying {
   
   private var terminationHandler:((Process) -> Void) {
     return { [weak self] process in
-      guard let `self` = self else { return }
+      guard let `self` = self, let handle = self.output?.fileHandleForReading else { return }
       
-      let handle  = self.output.fileHandleForReading
-      let data    = handle.readDataToEndOfFile()
+      let data = handle.readDataToEndOfFile()
       
       DispatchQueue.main.async {
         self.callback(data)
+        handle.closeFile()
       }
     }
   }
@@ -72,8 +73,6 @@ public class Task : Equatable, NSCopying {
     self.arguments  = arguments
     self.path       = path
     self.callback   = callback
-
-    self.output.fileHandleForReading.readabilityHandler = handleBlock
   }
   
   public func copy(with zone: NSZone? = nil) -> Any {
@@ -81,14 +80,24 @@ public class Task : Equatable, NSCopying {
   }
   
   public func start() {
-    self.process.launch()      
+    output = output ?? Pipe()
+
+    guard let output = self.output else { fatalError("Unable to create task output") }
+    
+    output.fileHandleForReading.readabilityHandler = handleBlock
+    
+    process.launch()
   }
   
   public func stop() {
+    process.interrupt()
     process.terminate()
+    process.waitUntilExit()
   }
 }
 
 public func ==(lhs:Task, rhs:Task) -> Bool {
   return lhs.identifier == rhs.identifier
 }
+
+

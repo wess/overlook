@@ -1,7 +1,7 @@
 
 all: build run
 
-build: xcode clean
+build: 
 	@swift build 
 
 clean:

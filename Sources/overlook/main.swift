@@ -19,7 +19,7 @@ let taskManager = TaskManager()
 let config      = Config()!
 let envVars     = config.envVars
 let directories = config.directories.map { "\(Path($0).absolute())" }
-let execute     = config.execute
+let execute     = config.execute.components(separatedBy: " ")
 
 print("Env: ", envVars)
 print("Dirs: ", directories)
@@ -27,9 +27,11 @@ print("Execute: ", execute)
 
 let task = taskManager.create(execute) { (data) in
   let str = String(data: data, encoding: .utf8)!
-  
+
   print("TASK: ", str)
 }
+  
+
 
 taskManager.start()
 
