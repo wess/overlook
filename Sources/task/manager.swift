@@ -13,8 +13,8 @@ public class TaskManager {
   private let defaultPath   = "/usr/bin/env"
   private var tasks:[Task]  = []
 
-  private let lock                      = DispatchSemaphore(value: 1)
-  private let taskQueue:DispatchQueue?  = DispatchQueue(label: "com.overlook.queue")
+  private let lock                    = DispatchSemaphore(value: 1)
+  private let taskQueue:DispatchQueue = DispatchQueue(label: "com.overlook.queue")
   
   public init() {}
   
@@ -44,10 +44,8 @@ public class TaskManager {
   }
   
   public func start() {
-    sync {
-      for task in tasks {
-        taskQueue?.async(execute: task.workItem)
-      }
+    for task in tasks {
+      taskQueue.async(execute: task.workItem)
     }
   }
 
