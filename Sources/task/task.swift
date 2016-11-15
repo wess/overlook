@@ -11,7 +11,6 @@ import PathKit
 
 public typealias TaskHandler      = ((Data) -> Void)
 internal let MAX_BUFFER           = 4096
-fileprivate let DefaultTaskQueue  = DispatchQueue(label: "com.overlook.tasks.queue")
 
 public class Task : Equatable, NSCopying {
   
@@ -21,6 +20,14 @@ public class Task : Equatable, NSCopying {
 
   public var isRunning:Bool {
     return process.isRunning
+  }
+
+  public var workItem:DispatchWorkItem {
+    return DispatchWorkItem { [weak self] in
+      guard let `self` = self else { return }
+      
+      self.start()
+    }
   }
   
   public let callback:TaskHandler

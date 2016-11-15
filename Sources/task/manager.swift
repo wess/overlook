@@ -13,9 +13,8 @@ public class TaskManager {
   private let defaultPath   = "/usr/bin/env"
   private var tasks:[Task]  = []
 
-  private let lock        = DispatchSemaphore(value: 1)
-  private let taskQueue   = DispatchQueue(label: "com.overlook.task.queue")
-  private let group       = DispatchGroup()
+  private let lock                      = DispatchSemaphore(value: 1)
+  private let taskQueue:DispatchQueue?  = DispatchQueue(label: "com.overlook.queue")
   
   public init() {}
   
@@ -46,33 +45,27 @@ public class TaskManager {
   
   public func start() {
     sync {
-      group.enter()
-      
-      taskQueue.async(group: group, execute: DispatchWorkItem(block: { [weak self] in
-        guard let `self` = self else { fatalError("\(#function) - No self") }
-        
-        for task in self.tasks {
-          task.start()
-        }
-      }))
-      
-      group.leave()
+      for task in tasks {
+        taskQueue?.async(execute: task.workItem)
+      }
     }
   }
 
   public func restart() {
-    
-    let current = tasks
-    
-    for task in current {
-      task.stop()
+    sync {
+      let current = tasks
+      
+      for task in current {
+        task.workItem.cancel()
+        task.stop()
+      }
+      
+      tasks.removeAll()
+      
+      tasks = current.map { $0.copy() as! Task }
+
+      start()
     }
-    
-    tasks.removeAll()
-    
-    tasks = current.map { $0.copy() as! Task }
-    
-    start()
   }
 
   
@@ -92,6 +85,7 @@ public class TaskManager {
       let filtered      = current.filter { $0 == task }
       
       for (index, task) in filtered.enumerated() {
+        task.workItem.cancel()
         task.stop()
         
         current.remove(at: index)
@@ -102,8 +96,10 @@ public class TaskManager {
   }
   
   private func sync(block:((Void) -> Void)) {
-    lock.wait()
-    block()
-    lock.signal()
+    DispatchQueue.main.sync {
+      lock.wait()
+      block
+      lock.signal()
+    }
   }
 }
