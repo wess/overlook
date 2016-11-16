@@ -15,10 +15,6 @@ public class HelpCommand : SwiftCLI.HelpCommand, Command {
   let signature         = "[<opt>] ..."
   let shortDescription  = "Prints help information"
   
-  let failOnUnrecognizedOptions           = false
-  let unrecognizedOptionsPrintingBehavior = UnrecognizedOptionsPrintingBehavior.printNone
-  let helpOnHFlag                         = false
-  
   var printCLIDescription: Bool = true
   var allCommands: [Command]    = []
   
