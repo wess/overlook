@@ -20,7 +20,7 @@ public func Config() -> Settings? {
 
       return settings
 
-    } catch (let err) {
-        fatalError("Config error: \(err)")
+    } catch (_) {
+        return nil
     }
 }

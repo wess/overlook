@@ -12,6 +12,10 @@ import PathKit
 public struct Env {
   public let path:Path
 
+  public init() {
+    self.init(Path.current)
+  }
+
   public init(_ path:String) {
     self.init(Path(path))
   }
@@ -46,7 +50,7 @@ public struct Env {
   }
 }
 
-extension Env {
+extension Env /* Get/Set */ {
   public func get(_ key:String) -> String? {
     return ProcessInfo.processInfo.environment[key]
   }
@@ -58,4 +62,29 @@ extension Env {
   public func set(_ key:String, value:String, override:Bool = true) {
     setenv(key, value, override ? 1 : 0)
   }
+  
+  public func delete(_ key:String) {
+    unsetenv(key)
+  }
 }
+
+extension Env /* subscript */ {
+  
+  public subscript(key:String) -> String? {
+    get {
+      return self.get(key)
+    }
+  
+    set {
+      guard let newValue = newValue else {
+        self.delete(key)
+        return
+      }
+      
+      self.set(key, value: newValue)
+    }
+  }
+}
+
+
+

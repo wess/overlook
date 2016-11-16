@@ -7,14 +7,19 @@
 //
 
 import Foundation 
-import json 
+import json
+import PathKit
 
 public struct Settings {
-  public var envVars:[String:String]  = [:]
   public var verbose:Bool             = true
+  public var envVars:[String:String]  = [:]
   public var ignore:[String]          = []
   public var directories:[String]     = []
   public var execute:String           = ""
+  
+  public var paths:[Path] {
+    return directories.map { Path($0).absolute() }
+  }
 }
 
 extension Settings {

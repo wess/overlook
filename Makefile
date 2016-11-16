@@ -1,7 +1,7 @@
 
 all: build run
 
-build: 
+build: xcode
 	@swift build 
 
 clean:
@@ -11,9 +11,14 @@ xcode:
 	@rm -rf overlook.xcodeproject
 	@swift package generate-xcodeproj
 
-run:
+run: build
 	@.build/debug/overlook
 
+version: build
+	@.build/debug/overlook version 
+
+help: build
+	@.build/debug/overlook help
 
 release: clean
 	@swift build --configuration release
