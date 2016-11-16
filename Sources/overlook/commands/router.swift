@@ -7,18 +7,19 @@
 //
 
 import SwiftCLI
+import Rainbow
 import config
 
-class OverlookRouter: Router {
-  var current:Command
+public class OverlookRouter: Router {
+  public var current:Command
   
-  var exitImmediately = false
+  public var exitImmediately = false
   
-  init(_ defaultCommand:Command) {
+  public init(_ defaultCommand:Command) {
     self.current = defaultCommand
   }
   
-  func route(commands: [Command], aliases: [String : String], arguments: RawArguments) -> Command? {
+  public func route(commands: [Command], aliases: [String : String], arguments: RawArguments) -> Command? {
     guard let name = arguments.unclassifiedArguments.first else {
       return current
     }

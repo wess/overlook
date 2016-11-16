@@ -9,10 +9,11 @@
 import Foundation 
 import SwiftCLI 
 import PathKit 
+import Rainbow
 import config
 import env
 
-class Overlook {
+public class Overlook {
   static let name           = "overlook"
   static let version        = "0.0.1"
   static let desc           = "File monitoring tool that excutes on change. Used anywhere."
@@ -40,7 +41,7 @@ class Overlook {
     ]
   }
   
-  init() {
+  public init() {
     CLI.setup(name: Overlook.name, version: Overlook.version, description: Overlook.desc)
     
     setupRouter()
@@ -75,7 +76,7 @@ class Overlook {
     CLI.alias(from: "--watch",  to: "watch")
   }
 
-  func run() {    
+  public func run() {    
     let result = CLI.go()
     
     guard result == CLIResult.success else {
@@ -94,7 +95,7 @@ class Overlook {
   }
 }
 
-func startup(_ run:String, watching:[String]) {
+public func startup(_ run:String, watching:[String]) {
     let executing = "executing: "
     let target    = run.bold
   
