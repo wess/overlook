@@ -12,9 +12,9 @@ import PathKit
 import Rainbow
 
 public class InitCommand : Command {
-  let name              = "init"
-  let signature         = ""
-  let shortDescription  = "Prints the current version of Overlook"
+  public let name              = "init"
+  public let signature         = ""
+  public let shortDescription  = "Prints the current version of Overlook"
 
   public func execute(arguments: CommandArguments) throws {
     let data = try JSONSerialization.data(withJSONObject: Overlook.dotTemplate, options: .prettyPrinted)

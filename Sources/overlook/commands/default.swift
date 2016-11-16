@@ -16,9 +16,9 @@ import task
 import watch
 
 public class DefaultCommand : Command {
-  let name              = ""
-  let signature         = "[<optional>] ..."
-  let shortDescription  = ""
+  public let name              = ""
+  public let signature         = "[<optional>] ..."
+  public let shortDescription  = ""
   
   private let taskManager = TaskManager()
   private var env         = Env()

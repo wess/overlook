@@ -11,9 +11,9 @@ import SwiftCLI
 import Rainbow
 
 public class HelpCommand : SwiftCLI.HelpCommand, Command {
-  let name              = "help"
-  let signature         = "[<opt>] ..."
-  let shortDescription  = "Prints help information"
+  public let name              = "help"
+  public let signature         = "[<opt>] ..."
+  public let shortDescription  = "Prints help information"
   
   var printCLIDescription: Bool = true
   var allCommands: [Command]    = []
