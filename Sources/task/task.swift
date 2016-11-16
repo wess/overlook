@@ -9,12 +9,10 @@
 import Foundation
 import PathKit
 
-public typealias TaskHandler      = ((Data) -> Void)
-internal let MAX_BUFFER           = 4096
-
+public typealias TaskHandler  = ((Data) -> Void)
+internal let MAX_BUFFER       = 4096
 
 public class Task : Equatable, NSCopying {
-
   public var identifier:Int32 {
     return process.processIdentifier
   }
@@ -47,7 +45,7 @@ public class Task : Equatable, NSCopying {
   private let maxBuffer         = MAX_BUFFER
   
   private var handleBlock:((FileHandle) -> Void) {
-    return { [weak self] handle in
+    return { [weak self] handle in 
       guard let `self` = self else { return }
       
       DispatchQueue.main.async {

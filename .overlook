@@ -11,10 +11,12 @@
     ".overlook",
     ".build",
     "*.xcodeproj",
-    "Packages"
+    "Packages",
+    "main.swift"
   ],
 
   "directories": [
+    "Sources",
     "Tests"
   ],
 

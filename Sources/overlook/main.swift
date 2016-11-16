@@ -8,9 +8,10 @@
 
 import Foundation 
 import PathKit
-import watch
+import Rainbow
+import SwiftCLI
+import watch 
 import config
-import terminal
 import task
 import env 
 
@@ -20,23 +21,29 @@ let config      = Config()!
 let envVars     = config.envVars
 let directories = config.directories.map { "\(Path($0).absolute())" }
 let execute     = config.execute.components(separatedBy: " ")
-
-print("Env: ", envVars)
-print("Dirs: ", directories)
-print("Execute: ", execute)
+let ignore      = config.ignore
 
 let task = taskManager.create(execute) { (data) in
   let str = String(data: data, encoding: .utf8)!
 
-  print("TASK: ", str)
-}
-  
+  print(str)
+} 
+
+// taskManager.start()
+
+// Watch(directories, exclude:ignore) {
+//   taskManager.restart()
+// }
+
+// if config.verbose {
+//   startDisplay(config.execute, directories:directories)
+// }
 
 
-taskManager.start()
+CLI.setup(name: Overlook.name, version: Overlook.version, description: Overlook.desc)
 
-Watch(directories) {
-  taskManager.restart()
-}
+CLI.router = OverlookRouter()
+
+let _ = CLI.go()
 
 dispatchMain()
