@@ -15,8 +15,8 @@ public class HelpCommand : SwiftCLI.HelpCommand, Command {
   public let signature         = "[<opt>] ..."
   public let shortDescription  = "Prints help information"
   
-  var printCLIDescription: Bool = true
-  var allCommands: [Command]    = []
+  public var printCLIDescription: Bool = true
+  public var allCommands: [Command]    = []
   
   public func setupOptions(options: OptionRegistry) {}
   
