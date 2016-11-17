@@ -4,7 +4,7 @@ all: build
 build:
 	@swift build 
 
-install: release
+install:
 	@mv .build/release/overlook /usr/local/bin/
 
 
