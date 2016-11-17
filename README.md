@@ -1,6 +1,6 @@
 # Overlook ![Swift](http://img.shields.io/badge/swift-3.0-brightgreen.svg)
 
-A commandline app that will watch your folder and monitor any changes. When a change occurs, *Overlook* will execute (or restart) the process. *Overlook* is platform
+A commandline app that will watch your folder and monitor any changes. When a change occurs, *Overlook* will execute (or restart) a command you specify. *Overlook* is platform
 independent and will work with anything from writing a README file, to developing a service.
 
 ---
