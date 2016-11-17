@@ -1,8 +1,12 @@
 
-all: build run
+all: build
 
-build: xcode
+build:
 	@swift build 
+
+install: release
+	@mv .build/release/overlook /usr/local/bin/
+
 
 clean:
 	@swift build --clean=dist
@@ -13,12 +17,6 @@ xcode:
 
 run: build
 	@.build/debug/overlook
-
-version: build
-	@.build/debug/overlook version 
-
-help: build
-	@.build/debug/overlook help
 
 release: clean
 	@swift build --configuration release
