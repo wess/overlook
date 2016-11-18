@@ -1,4 +1,8 @@
-# Overlook ![Swift](http://img.shields.io/badge/swift-3.0-brightgreen.svg)
+# Overlook 
+
+![Swift](http://img.shields.io/badge/swift-3.0-brightgreen.svg)
+[![Twitter Follow](https://img.shields.io/twitter/follow/overlookcli.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/overlookcli)
+
 
 A commandline app that will watch your folder and monitor any changes. When a change occurs, *Overlook* will execute (or restart) a command you specify. *Overlook* is platform
 independent and will work with anything from writing a README file, to developing a service.
@@ -65,9 +69,7 @@ This will generate the following file:
   "env" : {
     "example" : "variable"
   },
-  "execute" : [
-    "ls -la"
-  ],
+  "execute" : "ls -la",
   "directories" : [
     "build",
     "tests"
