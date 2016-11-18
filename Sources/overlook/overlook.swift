@@ -15,7 +15,7 @@ import env
 
 public class Overlook {
   static let name           = "overlook"
-  static let version        = "0.0.1"
+  static let version        = "0.1.0"
   static let desc           = "File monitoring tool that excutes on change. Used anywhere."
   
   static let dotTemplate:[String:Any] = [
@@ -23,7 +23,7 @@ public class Overlook {
     "verbose"     : true,
     "ignore"      : [".git", ".gitignore", ".overlook",],
     "directories" : ["build", "tests",],
-    "execute"     : ["ls -la"],
+    "execute"     : "ls -la",
   ]
 
   private lazy var helpCommand:HelpCommand        = HelpCommand()
