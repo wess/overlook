@@ -32,7 +32,7 @@ brew install wess/repo/overlook --HEAD
 
 ## Via Script
 ```bash
-curl -sL wess.io/overlook/install.sh
+curl -sL wess.io/overlook/install.sh | bash
 ```
 
 ## Build It Yourself
