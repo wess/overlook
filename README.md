@@ -8,6 +8,11 @@ A commandline app that will watch your folder and monitor any changes. When a ch
 independent and will work with anything from writing a README file, to developing a service.
 
 ---
+### Quick Start
+```bash
+$ overlook watch -t /folder/to/watch -e /script/to/execute
+```
+---
 
 ### Table of Contents
 
