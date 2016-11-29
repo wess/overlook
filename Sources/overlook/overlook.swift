@@ -6,9 +6,9 @@
 //
 //
 
-import Foundation 
-import SwiftCLI 
-import PathKit 
+import Foundation
+import SwiftCLI
+import PathKit
 import Rainbow
 import config
 import env

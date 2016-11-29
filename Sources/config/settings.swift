@@ -15,6 +15,7 @@ public struct Settings {
   public var envVars:[String:String]  = [:]
   public var ignore:[String]          = []
   public var directories:[String]     = []
+  public var routes:[String:String]   = [:]
   public var execute:String           = ""
   
   public var paths:[Path] {
@@ -28,6 +29,7 @@ extension Settings {
     verbose     = try decode(dictionary, key: "verbose")
     ignore      = try decode(dictionary, key: "ignore")
     directories = try decode(dictionary, key: "directories")
+    routes      = try decode(dictionary, key: "routes")
     execute     = try decode(dictionary, key: "execute")
   }
 }

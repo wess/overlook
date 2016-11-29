@@ -21,6 +21,7 @@ public class AdhocCommand : OptionCommand {
   private var targets:[String]  = []
   private var ignore:[String]   = []
   private var exec:[String]     = []
+  private let taskManager       = TaskManager()
   
   public func setupOptions(options: OptionRegistry) {
     options.add(keys: ["-t", "--target",], usage: "Comma separated list of directory or files to monitor", valueSignature: "target") { value in
@@ -38,13 +39,16 @@ public class AdhocCommand : OptionCommand {
     options.add(keys: ["-i", "--ignore",], usage: "Comma separated list of files or directories to ignore", valueSignature: "ignore") { value in
       self.ignore = value.replacingOccurrences(of: ", ", with: ",").components(separatedBy: ",")
     }
+
+    options.add(keys: ["-m", "--make",], usage: "Makefile task to execute", valueSignature: "make") { value in
+      self.exec = ["make", value,]
+    }    
   }
   
-  private let taskManager = TaskManager()
   public func execute(arguments: CommandArguments) throws {
 
     guard targets.count > 0, exec.count > 0 else {
-      throw CLIError.error("Arguments `target` and `execute` is required")
+      throw CLIError.error("Arguments `target` and `execute` is required".red)
     }
 
     startup(exec.joined(separator: " "), watching: targets)

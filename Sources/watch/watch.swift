@@ -7,9 +7,12 @@
 //
 
 import Foundation
+import config
 
 fileprivate class FileWatch {
-  fileprivate static let instance                 = FileWatch()
+  fileprivate static let instance = FileWatch()
+
+  fileprivate let settings = Config()!
   fileprivate var excluding:[String]              = []
   fileprivate var context                         = FSEventStreamContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
   fileprivate let flags                           = UInt32(kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagFileEvents)
@@ -17,7 +20,8 @@ fileprivate class FileWatch {
     guard let paths = unsafeBitCast(eventPaths, to: NSArray.self) as? [String],
           let path  = paths.first else { return }
     
-    let excludes = FileWatch.instance.excluding
+
+    let excludes = FileWatch.instance.excluding.map { $0.lowercased() }
     let filename = path.components(separatedBy: "/").last ?? ""
     let filtered = excludes.filter { $0.lowercased() == filename.lowercased() }
     

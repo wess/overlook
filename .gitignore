@@ -1,4 +1,6 @@
+.overlook
 .DS_Store
+/Tests
 /.build
 /Packages
 /*.xcodeproj
