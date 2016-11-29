@@ -7,8 +7,9 @@ let package = Package(
       Target(name: "watch"),
       Target(name: "config", dependencies: ["json"]),
       Target(name: "json"),
-      Target(name: "task"),
+      Target(name: "task", dependencies: ["signals"]),
       Target(name: "env"),
+      Target(name: "signals"),
     ],
 
     dependencies: [
