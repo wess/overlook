@@ -6,15 +6,15 @@
 //
 //
 
-import Foundation 
-import SwiftCLI 
+import Foundation
+import SwiftCLI
 import PathKit
 import Rainbow
 
 public class InitCommand : Command {
   public let name              = "init"
   public let signature         = ""
-  public let shortDescription  = "Prints the current version of Overlook"
+  public let shortDescription  = "Creates a new .overlook file in the current directory."
 
   public func execute(arguments: CommandArguments) throws {
     let data = try JSONSerialization.data(withJSONObject: Overlook.dotTemplate, options: .prettyPrinted)
