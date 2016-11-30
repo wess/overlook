@@ -37,18 +37,22 @@ public class DefaultCommand : Command {
     ignore      = settings.ignore.map { String(describing: Path($0).absolute()) }
     exec        = settings.execute.components(separatedBy: " ")
     
+    taskManager.verbose = settings.verbose
+    
     guard directories.count > 0, exec.count > 0 else {
       throw CLIError.error("No `directories` or `execute` found in .overlook file. They are required. ")
     }
   
     startup(exec.joined(separator: " "), watching: directories)
     
-    taskManager.create(exec) { (data) in
-      guard let str = String(data: data, encoding: .utf8) else {
+    taskManager.create(exec) {[weak self] (data) in
+      guard let `self` = self, let str = String(data: data, encoding: .utf8) else {
         return
       }
-      
-      print(str)
+
+      if self.taskManager.verbose {
+        print(str.trimmingCharacters(in: .whitespacesAndNewlines))
+      }
     }
     
     taskManager.start()

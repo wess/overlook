@@ -11,15 +11,20 @@ import PathKit
 import signals
 
 public class TaskManager {
+  public  var verbose:Bool  = true
+
   private let defaultPath   = "/usr/bin/env"
   private var tasks:[Task]  = []
+  private var isFirstRun    = true
 
   private let lock                    = DispatchSemaphore(value: 1)
   private let taskQueue:DispatchQueue = DispatchQueue(label: "com.overlook.queue")
 
   static weak var this:TaskManager? = nil
 
-  public init() {}
+  public init(verbose:Bool = true) {
+    self.verbose = verbose
+  }
 
   public func add(_ task:Task) {
     sync {
@@ -58,6 +63,15 @@ public class TaskManager {
 
     for task in tasks {
       taskQueue.async(execute: task.workItem)
+    }
+    
+    if !verbose {
+      if isFirstRun {
+        isFirstRun = false
+      }
+      else {
+        print("Overlook has restarted.")
+      }
     }
   }
 

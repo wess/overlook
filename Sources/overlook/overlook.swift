@@ -96,19 +96,17 @@ public class Overlook {
 }
 
 public func startup(_ run:String, watching:[String]) {
-    let executing = "executing: "
-    let target    = run.bold
+  let executing = "executing: "
+  let target    = run.bold
 
-    print("\nStarting Overlook...".green.bold)
-    print(executing + target.bold)
-    print("watching:")
+  print("\nStarting Overlook...".green.bold)
+  print(executing + target.bold)
+  print("watching:")
 
-    for directory in watching {
-      print("  ", directory.bold)
-    }
-
-    print("")
+  for directory in watching {
+    print("  ", directory.bold)
   }
+}
 
 
 

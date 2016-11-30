@@ -8,7 +8,8 @@
 
 import Foundation 
 import PathKit 
-import json 
+import json
+import Rainbow
 
 public func Config() -> Settings? {
     let current = Path.current + Path(".overlook")
@@ -20,7 +21,7 @@ public func Config() -> Settings? {
 
       return settings
 
-    } catch (_) {
-        return nil
+    } catch (let err) {
+        fatalError(err.localizedDescription)
     }
 }

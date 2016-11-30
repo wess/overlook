@@ -24,9 +24,14 @@ public struct Settings {
 
 extension Settings {
   public init(jsonRepresentation dictionary: JSONDictionary) throws {
-    envVars     = try decode(dictionary, key: "env")
-    verbose     = try decode(dictionary, key: "verbose")
-    ignore      = try decode(dictionary, key: "ignore")
+    // Optional
+    do {
+      envVars     = try decode(dictionary, key: "env")
+      verbose     = try decode(dictionary, key: "verbose")
+      ignore      = try decode(dictionary, key: "ignore")
+    } catch {}
+    
+    // Required
     directories = try decode(dictionary, key: "directories")
     execute     = try decode(dictionary, key: "execute")
   }
