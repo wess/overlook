@@ -15,7 +15,7 @@ import env
 
 public class Overlook {
   static let name           = "overlook"
-  static let version        = "0.1.3"
+  static let version        = "0.1.4"
   static let desc           = "File monitoring tool that excutes on change. Used anywhere."
 
   static let dotTemplate:[String:Any] = [
