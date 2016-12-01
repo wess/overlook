@@ -44,7 +44,7 @@ public class AdhocCommand : OptionCommand {
     }
   }
 
-  
+
   public func execute(arguments: CommandArguments) throws {
     guard targets.count > 0, exec.count > 0 else {
       throw CLIError.error("Arguments `target` and `execute` is required")
@@ -56,9 +56,11 @@ public class AdhocCommand : OptionCommand {
       guard let `self` = self, let str = String(data: data, encoding: .utf8) else {
         return
       }
-      
+
       if self.taskManager.verbose {
-        print(str)
+        let output = str.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        print(output)
       }
     }
 
