@@ -1,4 +1,7 @@
-# Overlook 
+<p align="center" >
+<img src="https://github.com/wess/overlook/blob/master/overlook-icon.png?raw=true" alt="Overlook" title="Overlook">
+</p>
+<h1 align="center">Overlook</h1>
 
 ![Swift](http://img.shields.io/badge/swift-3.0-brightgreen.svg)
 [![Twitter Follow](https://img.shields.io/twitter/follow/overlookcli.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/overlookcli)
